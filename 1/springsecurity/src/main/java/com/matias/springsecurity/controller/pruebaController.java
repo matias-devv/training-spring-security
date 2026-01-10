@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class pruebaController {
 
-    @GetMapping("/holamundoseg")
+    @GetMapping("/holaseg")
     public String segHelloWorld() {
         return "hola mundo segurizado";
     }
 
-    @GetMapping("/holamundonoseg")
+    @GetMapping("/holanoseg")
     public String noSegHelloWorld() {
         return "hola mundo no segurizado";
     }
