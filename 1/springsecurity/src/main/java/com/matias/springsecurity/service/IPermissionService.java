@@ -13,7 +13,7 @@ public interface IPermissionService {
 
     Permission save( Permission permission );
 
-    void deleteById(Long id);
+    //void deleteById(Long id);
 
     Permission update(Permission permission);
 

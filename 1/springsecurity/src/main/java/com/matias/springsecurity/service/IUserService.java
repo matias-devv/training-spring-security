@@ -13,7 +13,7 @@ public interface IUserService{
 
     public UserSec save(UserSec userSec);
 
-    public void deleteById(Long id);
+    //public void deleteById(Long id);
 
     public void update(UserSec userSec);
 

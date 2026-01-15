@@ -31,10 +31,10 @@ public class UserService implements IUserService {
         return userRepository.findById(userSec.getId()).orElse(null);
     }
 
-    @Override
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-    }
+//    @Override
+//    public void deleteById(Long id) {
+//        userRepository.deleteById(id);
+//    }
 
     @Override
     public void update(UserSec userSec) {

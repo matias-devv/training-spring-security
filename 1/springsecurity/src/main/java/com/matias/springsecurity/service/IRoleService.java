@@ -13,7 +13,7 @@ public interface IRoleService {
 
     Role save(Role role);
 
-    void deleteById(Long id);
+    //void deleteById(Long id);
 
     Role update(Role role);
 }

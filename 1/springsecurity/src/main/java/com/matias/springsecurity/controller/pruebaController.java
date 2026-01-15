@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class pruebaController {
 
     @GetMapping("/holaseg")
-    @PreAuthorize("hasAuthority('READ')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String segHelloWorld() {
         return "hola mundo segurizado";
     }
