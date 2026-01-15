@@ -8,11 +8,11 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -26,6 +26,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
@@ -34,12 +35,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests( http -> {
-
-                    http.requestMatchers(HttpMethod.GET, "/holanoseg").permitAll();
-                    http.requestMatchers(HttpMethod.GET, "/holaseg").hasAuthority("READ");
-                    http.anyRequest().denyAll();
-                })
                 .build();
     }
 
@@ -50,10 +45,10 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
 
         DaoAuthenticationProvider provider =
-                new DaoAuthenticationProvider(userDetailsService());
+                new DaoAuthenticationProvider( userDetailsService );
 
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
@@ -61,32 +56,8 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService(){
 
-        List users = new ArrayList<>();
-
-        users.add( User.withUsername("matias")
-                .password("1234" )
-                .roles("USER")
-                .authorities("CREATE","READ","UPDATE","DELETE")
-                .build());
-
-        users.add( User.withUsername("todocode")
-                    .password("1234") // esto si no está codificado, sino, tiene que seguir el algoritmo de codificación
-                    .roles("ADMIN")
-                    .authorities("CREATE", "READ", "UPDATE", "DELETE")
-                    .build());
-
-        users.add( User.withUsername("sabri")
-                .password("1234") // esto si no está codificado, sino, tiene que seguir el algoritmo de codificación
-                .roles("USER")
-                .authorities("DELETE")
-                .build());
-
-        return new InMemoryUserDetailsManager( users);
-    }
 }
