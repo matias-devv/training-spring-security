@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) {
 
         Optional<UserDTO> dto = userService.createUser(userDTO);
@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<UserDTO> updateUser (@RequestBody UserDTO userDTO){
 
         Optional<UserDTO> dto =  userService.updateUser(userDTO);

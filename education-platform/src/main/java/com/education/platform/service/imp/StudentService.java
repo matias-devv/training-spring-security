@@ -5,6 +5,7 @@ import com.education.platform.dto.UserDTO;
 import com.education.platform.model.Student;
 import com.education.platform.model.UserSec;
 import com.education.platform.repository.IStudentRepository;
+import com.education.platform.service.interfaces.ICourseService;
 import com.education.platform.service.interfaces.IStudentService;
 import com.education.platform.service.interfaces.IUserService;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class StudentService implements IStudentService {
     }
 
     @Override
-    public Optional<StudentDTO> createStudent(StudentDTO studentDTO) throws RuntimeException{
+    public Optional<StudentDTO> createStudent(StudentDTO studentDTO) throws RuntimeException {
 
         UserSec user = this.verifyIfUserExists(studentDTO);
 
@@ -34,7 +35,7 @@ public class StudentService implements IStudentService {
 
         studentRepository.save(newStudent);
 
-        userService.asignStudent( newStudent, user.getId() );
+        userService.asignStudent(newStudent, user.getId());
 
         //asign user to this student
         newStudent = this.asignUserToStudent(user, newStudent);
@@ -55,15 +56,15 @@ public class StudentService implements IStudentService {
 
     private UserSec verifyIfUserExists(StudentDTO studentDTO) {
 
-        UserSec userRead = userService.verifyIfUserExist( studentDTO.id_user() );
+        UserSec userRead = userService.verifyIfUserExist(studentDTO.id_user());
 
-        if ( userRead != null) {
+        if (userRead != null) {
             return userRead;
         }
         throw new RuntimeException("The user with that id was not found");
     }
 
-    private Student convertDtoToEntity( StudentDTO studentDTO) {
+    private Student convertDtoToEntity(StudentDTO studentDTO) {
         Student newStudent = new Student();
         newStudent.setFirstName(studentDTO.firstName());
         newStudent.setLastName(studentDTO.lastName());
@@ -77,6 +78,21 @@ public class StudentService implements IStudentService {
     }
 
     private StudentDTO convertEntityToDto(Student student) {
+
+        if (student.getUser() != null) {
+
+            return new StudentDTO(
+                    student.getId(),
+                    student.getFirstName(),
+                    student.getLastName(),
+                    student.getDate_of_birth(),
+                    student.getCellphone(),
+                    student.getMajor(),
+                    student.getGender(),
+                    student.getEmail(),
+                    student.getDni(),
+                    student.getUser().getId());
+        }
         return new StudentDTO(
                 student.getId(),
                 student.getFirstName(),
@@ -87,14 +103,14 @@ public class StudentService implements IStudentService {
                 student.getGender(),
                 student.getEmail(),
                 student.getDni(),
-                student.getUser().getId());
+                null);
     }
 
     @Override
     public Optional<StudentDTO> findById(Long id) {
 
         Student studentFound = studentRepository.findById(id)
-                                                 .orElse(null);
+                .orElse(null);
         if (studentFound != null) {
 
             StudentDTO newDto = this.convertEntityToDto(studentFound);
@@ -122,21 +138,22 @@ public class StudentService implements IStudentService {
 
         if (student != null) {
 
-            Optional<UserSec> userRead = userService.findEntityById( student.getUser().getId() );
+            student = this.unlinkUserToStudent(student, student.getUser().getId());
 
-            if (userRead.isPresent()) {
+            studentRepository.deleteById(id);
 
-                //set null on the "id_student" field on userEntity
-                userService.unlinkStudent( userRead.get().getId() );
-
-                //delete student
-                student.setUser( null );
-                studentRepository.deleteById(id);
-
-                return "The student was deleted successfully";
-            }
+            return "The student was deleted successfully";
         }
         return "The student was not found";
+    }
+
+    private Student unlinkUserToStudent(Student student, Long id_user) {
+
+        userService.unlinkStudent(id_user);
+
+        student.setUser(null);
+
+        return student;
     }
 
     @Override

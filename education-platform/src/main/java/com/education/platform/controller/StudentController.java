@@ -22,7 +22,7 @@ public class StudentController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<StudentDTO> createStudent(@RequestBody StudentDTO studentDTO){
 
         Optional<StudentDTO> dto = studentService.createStudent(studentDTO);
@@ -30,7 +30,7 @@ public class StudentController {
     }
 
     @GetMapping("/find/{id}")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<StudentDTO> findById(@PathVariable Long id){
 
         Optional<StudentDTO> dto = studentService.findById(id);
@@ -38,7 +38,7 @@ public class StudentController {
     }
 
     @GetMapping("/find-all")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<List> findAllStudents(){
 
         List<StudentDTO> listDto = studentService.findAllStudents();
@@ -47,13 +47,13 @@ public class StudentController {
 
 
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public String deleteById(@PathVariable Long id){
         return studentService.deleteById(id);
     }
 
     @PutMapping("/update")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<StudentDTO> updateStudent(@RequestBody StudentDTO studentDTO){
 
         Optional<StudentDTO> dto = studentService.updateStudent(studentDTO);

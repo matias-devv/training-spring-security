@@ -142,4 +142,27 @@ public class CourseService implements ICourseService {
         }
         return Optional.empty();
     }
+
+    @Override
+    public void filterStudentsByID(Long id_student) {
+
+        List<Course> courseList = courseRepository.findAll();
+        List<Course> newCourseList = new ArrayList<>();
+
+        for ( Course course  : courseList ) {
+
+            List<Student> studentList = course.getStudents();
+            List<Student> newList = new ArrayList<>();
+
+            for( Student student : studentList) {
+
+                if( student.getId() !=  id_student ) {
+                     newList.add(student);
+                }
+            }
+            course.setStudents(newList);
+            newCourseList.add(course);
+        }
+        courseRepository.saveAll(newCourseList);
+    }
 }

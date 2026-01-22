@@ -23,7 +23,7 @@ public class PermissionController {
     }
 
     @PostMapping("/save")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<PermissionDTO> savePermission(@RequestBody PermissionDTO permissionDTO) {
 
         Optional<PermissionDTO> permission = permissionService.savePermission(permissionDTO);

@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/courses")
+@PreAuthorize("denyAll()")
 public class CourseController {
 
     private final ICourseService courseService;
@@ -22,6 +23,7 @@ public class CourseController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<CourseDTO> createCourse( @RequestBody CourseDTO courseDTO){
 
         Optional<CourseDTO> dto = courseService.createCourse(courseDTO);
@@ -29,6 +31,7 @@ public class CourseController {
     }
 
     @GetMapping("/find/{id}")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<CourseDTO> findById( @PathVariable Long id){
 
         Optional<CourseDTO> dto = courseService.findById(id);
@@ -36,6 +39,7 @@ public class CourseController {
     }
 
     @GetMapping("/find-all")
+    @PreAuthorize("hasAnyRole('ESTUDIANTE', 'ADMINISTRADOR', 'PROFESOR')")
     public ResponseEntity<List> findAllCourses(){
 
         List<CourseDTO> dtoList = courseService.findAllCourses();
@@ -43,11 +47,13 @@ public class CourseController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public String deleteById( @PathVariable Long id){
         return courseService.deleteById(id);
     }
 
     @PutMapping("/update")
+    @PreAuthorize(" hasRole('PROFESOR')")
     public ResponseEntity<CourseDTO> updateCourse(@RequestBody CourseDTO courseDTO){
 
         Optional<CourseDTO> dto = courseService.updateCourse(courseDTO);

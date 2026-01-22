@@ -22,7 +22,7 @@ public class RoleController {
     }
 
     @PostMapping("/save")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<RoleDTO> save(@RequestBody RoleDTO roleDTO) {
 
         Optional<RoleDTO> newRole = roleService.createRole(roleDTO);

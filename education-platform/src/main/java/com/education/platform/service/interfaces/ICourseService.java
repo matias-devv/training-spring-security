@@ -17,4 +17,6 @@ public interface ICourseService {
     public String deleteById(Long id);
 
     public Optional<CourseDTO> updateCourse(CourseDTO courseDTO);
+
+    void filterStudentsByID(Long id_student);
 }
