@@ -2,8 +2,7 @@ package com.education.platform.controller;
 
 import com.education.platform.dto.RoleDTO;
 import com.education.platform.model.Role;
-import com.education.platform.service.IRoleService;
-import jakarta.validation.Valid;
+import com.education.platform.service.interfaces.IRoleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,7 @@ public class RoleController {
     }
 
     @PostMapping("/save")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<RoleDTO> save(@RequestBody RoleDTO roleDTO) {
 
         Optional<RoleDTO> newRole = roleService.createRole(roleDTO);

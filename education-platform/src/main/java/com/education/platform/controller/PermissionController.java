@@ -2,8 +2,7 @@ package com.education.platform.controller;
 
 import com.education.platform.dto.PermissionDTO;
 import com.education.platform.model.Permission;
-import com.education.platform.service.IPermissionService;
-import com.education.platform.service.imp.PermissionService;
+import com.education.platform.service.interfaces.IPermissionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +23,7 @@ public class PermissionController {
     }
 
     @PostMapping("/save")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<PermissionDTO> savePermission(@RequestBody PermissionDTO permissionDTO) {
 
         Optional<PermissionDTO> permission = permissionService.savePermission(permissionDTO);

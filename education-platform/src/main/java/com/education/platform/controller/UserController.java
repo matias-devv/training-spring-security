@@ -1,7 +1,7 @@
 package com.education.platform.controller;
 
 import com.education.platform.dto.UserDTO;
-import com.education.platform.service.IUserService;
+import com.education.platform.service.interfaces.IUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping("/save")
-    @PreAuthorize("hasRole('ADMINISTRADOR')")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) {
 
         Optional<UserDTO> dto = userService.createUser(userDTO);

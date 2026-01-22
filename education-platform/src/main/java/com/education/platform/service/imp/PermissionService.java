@@ -3,7 +3,7 @@ package com.education.platform.service.imp;
 import com.education.platform.dto.PermissionDTO;
 import com.education.platform.model.Permission;
 import com.education.platform.repository.IPermissionRepository;
-import com.education.platform.service.IPermissionService;
+import com.education.platform.service.interfaces.IPermissionService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

@@ -4,8 +4,8 @@ import com.education.platform.dto.RoleDTO;
 import com.education.platform.model.Permission;
 import com.education.platform.model.Role;
 import com.education.platform.repository.IRoleRepository;
-import com.education.platform.service.IPermissionService;
-import com.education.platform.service.IRoleService;
+import com.education.platform.service.interfaces.IPermissionService;
+import com.education.platform.service.interfaces.IRoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

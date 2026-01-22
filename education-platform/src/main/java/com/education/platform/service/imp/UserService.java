@@ -1,12 +1,14 @@
 package com.education.platform.service.imp;
 
 import com.education.platform.dto.UserDTO;
+import com.education.platform.model.Professor;
 import com.education.platform.model.Role;
+import com.education.platform.model.Student;
 import com.education.platform.model.UserSec;
 import com.education.platform.repository.IUserRepository;
 import com.education.platform.security.config.SecurityConfig;
-import com.education.platform.service.IRoleService;
-import com.education.platform.service.IUserService;
+import com.education.platform.service.interfaces.IRoleService;
+import com.education.platform.service.interfaces.IUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -31,7 +33,7 @@ public class UserService implements IUserService {
 
         UserSec newUser = new UserSec();
 
-        newUser = this.convertDtoToEntity( newUser, dto);
+        newUser = this.convertDtoToEntity( dto);
 
         Set<Role> roles = this.getRolesList(dto);
 
@@ -50,7 +52,10 @@ public class UserService implements IUserService {
         return roles;
     }
 
-    private UserSec convertDtoToEntity(UserSec user, UserDTO dto) {
+    @Override
+    public UserSec convertDtoToEntity(UserDTO dto) {
+        UserSec user = new UserSec();
+        user.setId( dto.id() );
         user.setUsername(dto.username());
         user.setPassword(dto.password());
         user.setEnabled(dto.enabled());
@@ -59,6 +64,11 @@ public class UserService implements IUserService {
         user.setCredentialsNotExpired(dto.credentialsNotExpired());
         user.setListRoles(dto.listRoles());
         return user;
+    }
+
+    @Override
+    public UserSec verifyIfUserExist(Long id_user) {
+        return userRepository.findById(id_user).orElse(null);
     }
 
     @Override
@@ -73,6 +83,18 @@ public class UserService implements IUserService {
             UserDTO dto = this.convertEntityToDTO(user);
 
             return Optional.of(dto);
+
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<UserSec> findEntityById(Long id) {
+
+        UserSec userSec = userRepository.findById(id).orElse(null);
+
+        if( userSec != null){
+            return Optional.of(userSec);
         }
         return Optional.empty();
     }
@@ -119,6 +141,7 @@ public class UserService implements IUserService {
             Set<Role> rolesList = this.getRolesList(dto);
 
             if ( !rolesList.isEmpty()) {
+
                 user.setListRoles(rolesList);
 
                 userRepository.save(user);
@@ -129,6 +152,65 @@ public class UserService implements IUserService {
             }
         }
         return Optional.empty();
+    }
+
+    @Override
+    public void asignStudent(Student student, Long id_user) {
+        Optional<UserSec> user = userRepository.findEntityById( id_user );
+
+        if ( user.isPresent() ) {
+
+            UserSec userEntity = user.get();
+
+            userEntity.setStudent( student );
+
+            userRepository.save(userEntity);
+        }
+    }
+
+    @Override
+    public void unlinkStudent(Long id_user) {
+
+        Optional<UserSec> user = userRepository.findEntityById( id_user );
+
+        if ( user.isPresent() ) {
+
+            UserSec userEntity = user.get();
+
+            userEntity.setStudent( null );
+
+            userRepository.save(userEntity);
+        }
+    }
+
+    @Override
+    public void asignProfessor(Professor professor, Long id_user) {
+
+        Optional<UserSec> user = userRepository.findEntityById( id_user );
+
+        if ( user.isPresent() ) {
+
+            UserSec userEntity = user.get();
+
+            userEntity.setProfessor( professor );
+
+            userRepository.save(userEntity);
+        }
+    }
+
+    @Override
+    public void unlinkProfessor(Long id_user) {
+
+        Optional<UserSec> user = userRepository.findEntityById( id_user );
+
+        if ( user.isPresent() ) {
+
+            UserSec userEntity = user.get();
+
+            userEntity.setProfessor( null );
+
+            userRepository.save(userEntity);
+        }
     }
 
 }

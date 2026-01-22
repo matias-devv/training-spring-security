@@ -32,4 +32,13 @@ public class UserSec {
     @JoinTable( name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
                   inverseJoinColumns = @JoinColumn (name = "role_id") )
     private Set<Role> listRoles = new HashSet<>();
+
+
+    @OneToOne
+    @JoinColumn(name = "id_professor", nullable = true)
+    private Professor professor;
+
+    @OneToOne
+    @JoinColumn(name = "id_student", nullable = true)
+    private Student student;
 }

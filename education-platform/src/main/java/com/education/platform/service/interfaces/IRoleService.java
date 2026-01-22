@@ -1,8 +1,7 @@
-package com.education.platform.service;
+package com.education.platform.service.interfaces;
 
 import com.education.platform.dto.RoleDTO;
 import com.education.platform.model.Role;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;

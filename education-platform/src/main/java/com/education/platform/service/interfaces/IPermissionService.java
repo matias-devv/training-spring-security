@@ -1,9 +1,7 @@
-package com.education.platform.service;
+package com.education.platform.service.interfaces;
 
 import com.education.platform.dto.PermissionDTO;
 import com.education.platform.model.Permission;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
